@@ -502,6 +502,12 @@
                                                             <f:param name="dataverseId" value="#{DataversePage.dataverse.id}" />
                                                         </h:link>
                                                     </li>
+                                                    <li>
+                                                        <h:link id="manageVocabularies" styleClass="ui-commandlink ui-widget" outcome="manage-vocabularies">
+                                                            <h:outputText value="#{bundle['dataverse.option.dataverseVocabularies']}" />
+                                                            <f:param name="dataverseId" value="#{DataversePage.dataverse.id}" />
+                                                        </h:link>
+                                                    </li>
                                                     <li jsf:rendered="#{!settingsWrapper.rsyncOnly}">
                                                         <h:link id="manageGuestbooks" styleClass="ui-commandlink ui-widget" outcome="manage-guestbooks">
                                                             <h:outputText value="#{bundle['dataverse.option.datasetGuestbooks']}" />

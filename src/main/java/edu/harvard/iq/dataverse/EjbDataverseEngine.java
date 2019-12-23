@@ -100,6 +100,9 @@ public class EjbDataverseEngine {
 
     @EJB
     TemplateServiceBean templateService;
+
+    @EJB
+    VocabularyServiceBean vocabularyService;
     
     @EJB
     SavedSearchServiceBean savedSearchService;
@@ -428,6 +431,11 @@ public class EjbDataverseEngine {
                 @Override
                 public TemplateServiceBean templates() {
                     return templateService;
+                }
+
+                @Override
+                public VocabularyServiceBean vocabularies() {
+                    return vocabularyService;
                 }
                 
                 @Override

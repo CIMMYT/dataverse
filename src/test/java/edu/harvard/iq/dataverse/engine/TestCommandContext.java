@@ -111,6 +111,9 @@ public class TestCommandContext implements CommandContext {
     }
 
     @Override
+    public VocabularyServiceBean vocabularies(){return null;}
+
+    @Override
     public SavedSearchServiceBean savedSearches() {
         return null;
     }

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+</h:head>
+<h:body>
+    <ui:composition template="/dataverse_template.xhtml">
+        <f:metadata>
+            <f:viewParam name="vocabularyId" value="#{editVocabulary.vocabularyId}"/>
+            <f:viewParam name="dataverseId" value="#{editVocabulary.dataverseId}"/>
+            <f:viewAction action="#{dataverseSession.updateLocaleInViewRoot}"/>
+            <f:viewAction action="#{editVocabulary.init}"/>
+            <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(editVocabulary.dataverse, bundle['dataverse.editVocabulary.pageTitle'])}"/>
+        </f:metadata>
+        <ui:define name="body">
+            <h:form id = "edit-vocabulary">
+                <!-- Edit Terms -->
+                <p:panel id="edit-terms">
+                    <p:dataTable value="#{editVocabulary.cvTerms}" var="term" id="term-edit-table" editable="true" >
+                        <f:facet name="header">
+                            #{bundle['dataverse.editVocabulary.termTable.header']}
+                        </f:facet>
+                        <p:column sortBy="#{term.term}" headerText="#{bundle['dataverse.editVocabulary.termTableHeader.term']}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{term.term}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{term.term}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column orderBy="#{term.term}" headerText="#{bundle['dataverse.editVocabulary.termTableHeader.url']}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{term.url}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{term.url}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.edit']}" width="5%">
+                            <p:rowEditor />
+                        </p:column>
+                        <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.delete']}" width="10%">
+                            <div class="btn-group" role="group">
+                                <p:commandLink type="button" styleClass="btn btn-default"
+                                               title="Delete Term"
+                                               action="#{editVocabulary.deleteTerm(term)}"
+                                               update=":edit-vocabulary:edit-terms">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </p:commandLink>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dataTable value="#{editVocabulary.cvTermsForDelete}" var="deleteterm" id="term-delete-table" style="margin-top:20px">
+                        <f:facet name="header">
+                            #{bundle['dataverse.editVocabulary.deletetermTable.header']}
+                        </f:facet>
+                        <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.term']}">
+                            <h:outputText value="#{deleteterm.term}"/>
+                        </p:column>
+
+                        <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.url']}">
+                            <h:outputText value="#{deleteterm.url}"/>
+                        </p:column>
+
+                        <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.restore']}" width="10%">
+                            <div class="btn-group" role="group">
+                                <p:commandLink type="button" styleClass="btn btn-default"
+                                               title="Undo Delete Term"
+                                               action="#{editVocabulary.restoreTerm(deleteterm)}"
+                                               update=":edit-vocabulary:edit-terms">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </p:commandLink>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <!-- Create new term -->
+
+                <p:panel header="#{bundle['dataverse.editVocabulary.panelcreate.header']}" style="margin-top:20px">
+                    <p:panel>
+                        <h:panelGrid columns="2" cellpadding="5">
+
+                            <h:outputLabel value="#{bundle['dataverse.editVocabulary.termTableHeader.term']}:*" ></h:outputLabel>
+                            <p:inputText value="#{editVocabulary.newTerm.term}"/>
+
+                            <h:outputLabel value="#{bundle['dataverse.editVocabulary.termTableHeader.url']}: " ></h:outputLabel>
+                            <p:inputText value="#{editVocabulary.newTerm.url}"/>
+
+                            <p:commandButton id="btn_add" value="#{bundle['dataverse.editVocabulary.panelcreate.addButton']}" update=":edit-vocabulary:table-new-term @parent" action="#{editVocabulary.reinit}" >
+                                <p:collector value="#{editVocabulary.newTerm}" addTo="#{editVocabulary.newTerms}"  unique="true"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:outputPanel id="table-new-term">
+                        <p:dataTable value="#{editVocabulary.newTerms}" var="new" id="new-terms">
+                            <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.term']}">
+                                <h:outputText value="#{new.term}"/>
+                            </p:column>
+
+                            <p:column headerText="#{bundle['dataverse.editVocabulary.termTableHeader.url']}">
+                                <h:outputText value="#{new.url}"/>
+                            </p:column>
+
+                            <p:column headerText="Action" width="10%">
+                                <p:commandLink value="#{bundle['dataverse.editVocabulary.panelcreate.removeButton']}" update=":edit-vocabulary:table-new-term" process=":edit-vocabulary:table-new-term">
+                                    <p:collector value="#{new}"  removeFrom="#{editVocabulary.newTerms}" unique="true"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                </p:panel>
+
+                <!--- Panel Button -->
+
+                <div class="pull-right" style="margin-top: 20px;">
+                    <p:commandLink  type="button" styleClass="btn btn-default" style="color:#000;"
+                                    action="#{editVocabulary.init()}"
+                                    update="@form">
+                        <span class="glyphicon glyphicon-repeat"/> <h:outputText value="#{bundle['dataverse.editVocabulary.button.reset']}"/>
+                    </p:commandLink>
+
+                    <p:commandLink  type="button" styleClass="btn btn-default" style="color:#000;"
+                                    validateClient="true"
+                                    action="#{editVocabulary.Save()}">
+                        <p:confirm header="Confirmation" message="#{bundle['dataverse.editVocabulary.confirmChanges']}" icon="pi pi-exclamation-triangle" />
+                        <span class="glyphicon glyphicon-floppy-disk"/> <h:outputText value="#{bundle['dataverse.editVocabulary.button.save']}"/>
+                    </p:commandLink>
+
+                    <p:commandLink  type="button" styleClass="btn btn-default " style="color:#000;"
+                                    action="#{editVocabulary.Cancel()}">
+                        <span class="glyphicon glyphicon-minus"/> <h:outputText value="#{bundle['dataverse.editVocabulary.button.save']}"/>
+                    </p:commandLink>
+                </div>
+
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                </p:confirmDialog>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

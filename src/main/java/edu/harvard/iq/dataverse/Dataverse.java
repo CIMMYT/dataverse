@@ -756,4 +756,43 @@ public class Dataverse extends DvObjectContainer {
         }
         return false;
     }
+
+
+    @OneToMany(mappedBy="dataverse", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<DataverseControlledVocabulary> vocabularies;
+
+    public List<DataverseControlledVocabulary> getVocabularies() {
+        return vocabularies;
+    }
+
+    public void setVocabularies(List<DataverseControlledVocabulary> vocabularies) {
+        this.vocabularies = vocabularies;
+    }
+
+
+    @OneToMany(mappedBy="owner", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<ControlledVocabulary> controlledvocabularies;
+
+    public List<ControlledVocabulary> getControlledvocabularies() {
+        return controlledvocabularies;
+    }
+
+    public void setControlledvocabularies(List<ControlledVocabulary> controlledvocabularies) {
+        this.controlledvocabularies = controlledvocabularies;
+    }
+
+    public List<ControlledVocabulary> getParentVocabularies() {
+        List<ControlledVocabulary> retList = new ArrayList<>();
+        Dataverse testDV = this;
+        while (testDV.getOwner() != null){
+
+            if (!testDV.getMetadataBlocks().equals(testDV.getOwner().getMetadataBlocks())){
+                break;
+            }
+            retList.addAll(testDV.getOwner().getControlledvocabularies());
+            testDV = testDV.getOwner();
+        }
+        return  retList;
+    }
+
 }

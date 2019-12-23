@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+</h:head>
+<h:body>
+    <ui:composition template="/dataverse_template.xhtml">
+        <ui:param name="pageTitle" value="#{bundle['dataverse.createVocabulary.AddVocabulary.pageTittle']} - #{createVocabularyPage.dataverse.name}"/>
+        <ui:param name="dataverse" value="#{createVocabularyPage.dataverse}"/>
+        <ui:param name="showMessagePanel" value="#{true}"/>
+        <f:metadata>
+            <f:viewParam name="dataverseId" value="#{createVocabularyPage.dataverseId}"/>
+            <f:viewAction action="#{dataverseSession.updateLocaleInViewRoot}"/>
+            <f:viewAction action="#{createVocabularyPage.init}"/>
+            <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(createVocabularyPage.dataverse, bundle['dataverse.createVocabulary.AddVocabulary.pageTittle'])}"/>
+        </f:metadata>
+        <ui:define name="body">
+            <h:form id="vocabulary_form" enctype="multipart/form-data;charset=UTF-8">
+                <ui:fragment>
+                    <p class="help-block">
+                        <h:outputFormat value="#{bundle['dataverse.createVocabulary.tip']}" escape="false">
+                            <f:param value="#{systemConfig.guidesBaseUrl}"/>
+                            <f:param value="#{systemConfig.guidesVersion}"/>
+                        </h:outputFormat>
+                    </p>
+                    <p class="help-block">
+                        <p:commandButton value="Download" icon="pi pi-download" process="@none">
+                            <p:fileDownload value="#{createVocabularyPage.csvFile}"  />
+                        </p:commandButton>
+                    </p>
+                </ui:fragment>
+                <ui:fragment id="new_vocabulary_form" >
+                    <p:messages showDetail="true"/>
+                    <p:panel id="new_vocabulary_fields">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="vocabularyName">
+                                        #{bundle['dataverse.createVocabulary.tab.header.vocabulary']}
+                                        <span class="glyphicon glyphicon-asterisk text-danger" title="#{bundle.requiredField}"/>
+                                        <span class="glyphicon glyphicon-question-sign tooltip-icon"
+                                              data-toggle="tooltip" data-placement="auto right" data-container="body" data-original-title="#{bundle['dataverse.createVocabulary.name.title']}"></span>
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <p:inputText id="vocabularyName" styleClass="form-control" value="#{createVocabularyPage.newVocabulary.vocabularyName}" required="true">
+                                            <f:validateLength minimum="2" />
+                                        </p:inputText>
+                                        <p:messages for="vocabularyName" display="icon"/>
+                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="vocabularyLanguaje">
+                                        #{bundle['dataverse.createVocabulary.tab.header.vocabularylanguage']}
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <p:autoComplete id="vocabularyLanguaje" dropdown="true" value="#{createVocabularyPage.newVocabulary.vocabularyLanguage}" completeMethod="#{createVocabularyPage.onCompleteLanguage}" />
+                                        <p:messages for="vocabularyLanguaje"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <p class="form-control-static">
+                                        <span class="glyphicon glyphicon-asterisk text-danger"/> <h:outputText value="#{bundle['dataverse.createVocabulary.asterisk.tip']}"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </p:panel>
+                    <h:panelGrid id="new_vocabulary_datatable">
+                        <div class="col-sm-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <p:fileUpload fileUploadListener="#{createVocabularyPage.handleFileUpload}" invalidFileMessage="#{bundle['dataverse.createVocabulary.loadfile.invalidfile']}" id="changeVocabularyFile" allowTypes="/(\.|\/)(csv)$/" dragDropSupport="true"  multiple="false"
+                                                  label="#{bundle['dataverse.createVocabulary.loadfile']}" update=":vocabulary_form:new_vocabulary_datatable"/>
+                                    <p:messages showDetail="true"/>
+                                    <p:dataTable value="#{createVocabularyPage.newControlledVocabularyTerms}" var="item"
+                                                 rows="10"
+                                                 rendered="#{createVocabularyPage.rowsExists()}"
+                                                 paginator="true"
+                                                 editable="true"
+                                                 rowsPerPageTemplate="5,10,15">
+                                        <p:column headerText="#{bundle['dataverse.createVocabulary.datatableHeader.term']}" sortBy="#{item.term}">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{item.term}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{item.term}" style="width:100%"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <p:column headerText="#{bundle['dataverse.createVocabulary.datatableHeader.url']}" sortBy="#{item.url}">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{item.url}" /></f:facet>
+                                                <f:facet name="input"><p:inputText value="#{item.url}" style="width:100%"/></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <p:column style="width:35px">
+                                            <p:rowEditor />
+                                        </p:column>
+                                    </p:dataTable>
+                                    <div class="button-block" jsf:rendered="#{createVocabularyPage.rowsExists()}">
+                                        <p:commandButton class="btn btn-default" update=":vocabulary_form:new_vocabulary_fields" value="#{bundle['dataverse.createVocabulary.saveChangesVocabulary']}"  onclick="PF('cd-create-Vocabulary').show()"/>
+                                        <p:commandButton class="btn btn-default" id="vocabularyCancel" value="#{bundle.cancel}" action="#{createVocabularyPage.cancel()}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGrid>
+                    <!-- Create New Controlled Vocabulary - Confirm Dialog -->
+                    <p:confirmDialog message="#{bundle['dataverse.createVocabulary.dialog.confirm']}" header="#{bundle['dataverse.createVocabulary.dialog.confirm.header']}" severity="alert" widgetVar="cd-create-Vocabulary">
+                        <p:commandButton value="Yes, Sure" action="#{createVocabularyPage.save()}" update="messages" oncomplete="PF('cd').hide()"/>
+                        <p:commandButton value="Not Yet" onclick="PF('cd').hide();" type="button" />
+                    </p:confirmDialog>
+
+                </ui:fragment>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+</h:head>
+<h:body>
+    <f:metadata>
+        <f:viewParam name="dataverseId" value="#{manageVocabulariesPage.dataverseId}"/>
+        <f:viewAction action="#{dataverseSession.updateLocaleInViewRoot}"/>
+        <f:viewAction action="#{manageVocabulariesPage.init}"/>
+        <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(manageVocabulariesPage.dataverse, bundle['dataverse.manageVocabularies.pageTittle'])}"/>
+    </f:metadata>
+    <ui:composition template="/dataverse_template.xhtml">
+        <ui:param name="pageTitle" value="#{bundle['dataset.vocabularyTemplates.pageTitle']} - #{manageVocabulariesPage.dataverse.name}"/>
+        <ui:param name="dataverse" value="#{manageVocabulariesPage.dataverse}"/>
+        <ui:param name="showMessagePanel" value="#{true}"/>
+        <ui:define name="body">
+            <h:form id="vocabulary-template">
+                <div class="form-group clearfix">
+                    <div class="pull-right">
+
+                        <!--
+                        <h:outputLink type="button" styleClass="btn btn-default"
+                                      value="/vocabulary-test.xhtml?dataverseId=#{manageVocabulariesPage.dataverse.id}">
+                            <span class="glyphicon glyphicon-plus"/> <h:outputText value="Vocabulary test for autocomplete"/>
+                        </h:outputLink>
+                         -->
+
+                        <h:outputLink type="button" styleClass="btn btn-default"
+                                      value="/create-vocabulary.xhtml?dataverseId=#{manageVocabulariesPage.dataverse.id}">
+                            <span class="glyphicon glyphicon-plus"/> <h:outputText value="#{bundle['dataverse.manageVocabularies.createBtn']}"/>
+                        </h:outputLink>
+                    </div>
+                </div>
+                <div id="vocabulary-template-form">
+                    <div id="no-templates-message" class="panel panel-default" jsf:rendered="#{empty manageVocabulariesPage.dataversecontrolledvocabularies}">
+                        <div class="panel-body">
+                            <span class="help-block h3">#{bundle['dataverse.manageVocabularies.noVocabularies.why.header']}</span>
+                            <ul>
+                                <li><h:outputText value="#{bundle['dataverse.manageVocabularies.noVocabularies.why.reason1']}" escape="false"/></li>
+                                <li><h:outputText value="#{bundle['dataverse.manageVocabularies.noVocabularies.why.reason2']}" escape="false"/></li>
+                            </ul>
+                            <span class="help-block h3">#{bundle['dataverse.manageVocabularies.noVocabularies.why.header']}</span>
+                            <ul>
+                                <li><h:outputText value="#{bundle['dataverse.manageVocabularies.noVocabularies.why.tip1']}" escape="false"/></li>
+                                <li>
+                                    <h:outputFormat value="#{bundle['dataverse.manageVocabularies.noVocabularies.why.tip2']}" escape="false">
+                                        <f:param value="#{manageTemplatesPage.dataverse.alias}"/>
+                                    </h:outputFormat>
+                                </li>
+                            </ul>
+                            <p>
+                                <!--
+                                <h:outputFormat value="#{bundle['dataset.manageTemplates.noTemplates.getStarted']}" escape="false">
+                                    <f:param value="#{systemConfig.guidesBaseUrl}"/>
+                                    <f:param value="#{systemConfig.guidesVersion}"/>
+                                </h:outputFormat>
+                                -->
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <p:dataTable id="allVocabularies" styleClass="manageTable" var="vocabulary" value="#{manageVocabulariesPage.dataversecontrolledvocabularies}" widgetVar="allVocabularies"
+                                 rendered="#{!empty manageVocabulariesPage.dataversecontrolledvocabularies}"
+                                 paginator="true"
+                                 rows="10" rowsPerPageTemplate="5,10,15">
+                        <p:column width="70%" sortBy="#{vocabulary.controlledVocabulary.vocabularyName}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.name']}">
+                            <h:outputText value="#{vocabulary.controlledVocabulary.vocabularyName}" />
+                            <div jsf:rendered="#{vocabulary.isimport == true}">
+                                <em class="text-muted">
+                                    #{bundle['dataverse.manageVocabularies.tableVocabulary.noEdit']}
+                                </em>
+                            </div>
+                        </p:column>
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.controlledVocabulary.createDate}" headerText="#{bundle['dataset.manageTemplates.tab.header.date']}">
+                            <h:outputText value="#{vocabulary.controlledVocabulary.createDate}" />
+                        </p:column>
+                        <p:column width="15%" class="col-manage-action text-center" headerText="#{bundle['dataset.manageTemplates.tab.header.action']}">
+                            <div class="btn-group" role="group">
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataverse.manageVocabularies.tableVocabulary.edit']}"
+                                               action="#{manageVocabulariesPage.redirectControlledVocabularyEdit(vocabulary)}"
+                                               rendered="#{vocabulary.controlledVocabulary.owner.id == manageVocabulariesPage.dataverse.id}">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </p:commandLink>
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataverse.manageVocabularies.tableVocabulary.view']}"
+                                               action="#{manageVocabulariesPage.getTerms(vocabulary)}"
+                                               update=":vocabulary-template:viewvocabulary"
+                                               oncomplete="PF('viewVocabulary').show();bind_tooltip_popover();bind_bsui_components();">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </p:commandLink>
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataverse.manageVocabularies.tableVocabulary.delete']}"
+                                               update="@form,:messagePanel"
+                                               action="#{manageVocabulariesPage.setSelecteddataversecontrolledvocaulary(vocabulary)}"
+                                               oncomplete="PF('deleteConfirmation').show();bind_tooltip_popover();bind_bsui_components();" rendered = "#{vocabulary.isimport == false}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </p:commandLink>
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataverse.manageVocabularies.tableVocabulary.deleteImport']}"
+                                               update="@form,:messagePanel"
+                                               action="#{manageVocabulariesPage.setSelecteddataversecontrolledvocaulary(vocabulary)}"
+                                               oncomplete="PF('deleteImportedConfirmation').show();bind_tooltip_popover();bind_bsui_components();" rendered = "#{vocabulary.isimport != false}">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </p:commandLink>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <!-- Import Section -->
+
+                <div class="col-sm-12" jsf:rendered="#{!empty manageVocabulariesPage.cvforimport}" style="margin-top:100px;">
+                    <span class="help-block h4">#{bundle['dataset.manageVocabularies.import']}</span>
+                    <p:dataTable id="vocabularies_for_import"
+                                 styleClass="manageTable"
+                                 var="vocabulary" value="#{manageVocabulariesPage.cvforimport}" widgetVar="vocabularies_for_import"
+                                 paginator="true"
+                                 rows="10" rowsPerPageTemplate="5,10,15">
+                        <p:column width="55%" sortBy="#{vocabulary.vocabularyName}" headerText="#{bundle['dataset.manageVocabularies.tab.header.template']}">
+                            <h:outputText value="#{vocabulary.vocabularyName}" />
+                        </p:column>
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.createDate}" headerText="#{bundle['dataset.manageTemplates.tab.header.date']}">
+                            <h:outputText value="#{vocabulary.createDate}" />
+                        </p:column>
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.owner.name}" headerText="#{bundle['dataset.manageTemplates.tab.header.owner']}">
+                            <h:outputText value="#{vocabulary.owner.name}" />
+                        </p:column>
+                        <p:column width="15%" class="col-manage-action text-center" headerText="#{bundle['dataset.manageTemplates.tab.header.action']}">
+                            <div class="btn-group" role="group">
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataset.manageTemplates.tab.action.btn.view']}"
+                                               action="#{manageVocabulariesPage.getTermsControlledVocavulary(vocabulary)}"
+                                               update=":vocabulary-template:viewvocabulary"
+                                               oncomplete="PF('viewVocabulary').show();bind_tooltip_popover();bind_bsui_components();">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </p:commandLink>
+                                <p:commandLink type="button" styleClass="btn btn-default bootstrap-button-tooltip"
+                                               title="#{bundle['dataset.manageVocabulary.tab.action.btn.import']}"
+                                               action="#{manageVocabulariesPage.setSelectControlledvocabulary(vocabulary)}"
+                                               oncomplete="PF('importConfirmation').show();bind_tooltip_popover();bind_bsui_components();">
+                                    <span class="glyphicon glyphicon-copy"></span>
+                                </p:commandLink>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <!-- Import Section -->
+
+                <p:dialog header="#{bundle['dataset.manageVocabulary.tab.action.btn.delete.dialog.header']}" widgetVar="deleteConfirmation" modal="true">
+                    <p class="help-block">
+                        <span class="text-danger"><span class="glyphicon glyphicon-warning-sign"/> &#160;<h:outputText value="#{bundle['dataverse.manageVocabularies.dialog.deleteVocabulary.body']}" /></span>
+                    </p>
+                    <div class="button-block">
+                        <p:commandButton value="#{bundle.continue}" onclick="PF('deleteConfirmation').hide()"  action="#{manageVocabulariesPage.deleteVocabulary()}" update="@all" ajax="true"/>
+                        <p:commandButton value="#{bundle.cancel}" onclick="PF('deleteConfirmation').hide()" type="button" />
+                    </div>
+                </p:dialog>
+
+                <p:dialog header="#{bundle['dataverse.manageVocabularies.dialog.deleteVocabulary']}" widgetVar="deleteImportedConfirmation" modal="true">
+                    <p class="help-block">
+                        <span class="text-danger"><span class="glyphicon glyphicon-warning-sign"/> &#160;<h:outputText value="#{bundle['dataverse.manageVocabularies.dialog.deleteImport.body']}" /></span>
+                    </p>
+                    <div class="button-block">
+                        <p:commandButton value="#{bundle.continue}" onclick="PF('deleteImportedConfirmation').hide()"  action="#{manageVocabulariesPage.deleteImportVocabulary()}" update="@all"/>
+                        <p:commandButton value="#{bundle.cancel}" onclick="PF('deleteImportedConfirmation').hide()" type="button" />
+                    </div>
+                </p:dialog>
+
+                <p:dialog  id="viewvocabulary"  header="#{bundle['dataverse.manageVocabularies.dialog.viewVocabulary']}" widgetVar="viewVocabulary" modal="true">
+                    <h:form>
+                        <p:dataTable var="term" value="#{manageVocabulariesPage.selectedcontrolledVocabularyTerms}"
+                                     paginator="true"
+                                     rows="10" rowsPerPageTemplate="5,10,15">
+                            <p:column width="25%" sortBy="#{term.term}" headerText="#{bundle['dataverse.manageVocabularies.dialog.viewVocabulary.headerTerm']}">
+                                <h:outputText value="#{term.term}" />
+                            </p:column>
+                            <p:column width="25%" class="text-center" headerText="#{bundle['dataverse.manageVocabularies.dialog.viewVocabulary.headerUrl']}">
+                                <h:outputText value="#{term.url}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                    <div class="button-block">
+                        <p:commandButton value="#{bundle['dataverse.manageVocabularies.dialog.viewVocabulary.buttonDone']}" onclick="PF('viewVocabulary').hide()" type="button" />
+                    </div>
+                </p:dialog>
+
+                <p:dialog header="#{bundle['dataverse.manageVocabularies.dialog.Import.Header']}" widgetVar="importConfirmation" modal="true">
+                    <p class="help-block">
+                        <span class="text-danger"><span class="glyphicon glyphicon-warning-sign"/> &#160;<h:outputText value="#{bundle['dataverse.manageVocabularies.dialog.Import.body']}" /></span>
+                    </p>
+                    <div class="button-block">
+                        <p:commandButton value="#{bundle['dataverse.manageVocabularies.dialog.Import.ButtonYes']}" onclick="PF('deleteConfirmation').hide()"  action="#{manageVocabulariesPage.importvocabulary()}"/>
+                        <p:commandButton value="#{bundle['dataverse.manageVocabularies.dialog.Import.ButtonNo']}" onclick="PF('deleteConfirmation').hide()" type="button" />
+                    </div>
+                </p:dialog>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

@@ -423,6 +423,12 @@
             <version>2.4.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- For CSV files in Controlled Vocabularies feature CIMMYT -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.6</version>
+        </dependency>
         <!-- Added specific versionf of SLF4J jars; otherwise we end up with
         conflicting versions of slf4j-api and slf4j-log4j12, loaded as
         dependencies for different packages; which was causing some incompatibility
