@@ -33,7 +33,7 @@ public class DataverseControlledVocabulary implements  Serializable{
     private Dataverse dataverse;
 
     @ManyToOne
-    @JoinColumn(name = "ControlledVocabulary_id")
+    @JoinColumn(name = "controlledVocabulary_id")
     private ControlledVocabulary controlledVocabulary;
 
     public DataverseControlledVocabulary(){

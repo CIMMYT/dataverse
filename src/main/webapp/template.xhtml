@@ -23,6 +23,12 @@
                     <f:viewAction action="#{dataverseSession.updateLocaleInViewRoot}"/>
                     <f:viewAction action="#{TemplatePage.init}"/>
                     <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(TemplatePage.template.dataverse, (TemplatePage.editMode == 'CREATE' ? bundle['dataset.manageTemplates.createBtn'] : TemplatePage.template.name))}"/>
+
+                    <!-- Controlled vocabulary -->
+                    <f:viewParam name="ownerId" value="#{KeywordControlledVocabularyModal.ownerId}"/>
+                    <f:viewAction action="#{KeywordControlledVocabularyModal.loadOwnerControlledVocabulary}"/>
+                    <!-- Controlled Vocabulary -->
+
                 </f:metadata>
                 <h:form id="templateForm">
                     <p:focus context="templateForm"/>
@@ -124,6 +130,12 @@
                                   outcome="/manage-templates.xhtml?dataverseId=#{TemplatePage.dataverse.id}"></h:button>
                     </div>
                 </h:form>
+
+                <!--
+                <ui:include src="keywordControlledVocabularyModal.xhtml">
+                </ui:include>
+                -->
+
             </ui:define>
         </ui:composition>
     </h:body>

@@ -74,6 +74,13 @@
                     <f:viewAction action="#{DatasetPage.init}" rendered="true"/>
                     <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(DatasetPage.dataset)}"/>
                     <f:viewAction action="#{EditDatafilesPage.initCreateMode(DatasetPage.editMode, DatasetPage.workingVersion, DatasetPage.newFiles, DatasetPage.selectedFiles)}"/>
+
+                    <!-- Controlled vocabulary -->
+                    <f:viewParam name="ownerId" value="#{KeywordControlledVocabularyModal.ownerId}"/>
+                    <f:viewParam name="id" value="#{KeywordControlledVocabularyModal.datasetId}"/>
+                    <f:viewAction action="#{KeywordControlledVocabularyModal.loadOwnerControlledVocabulary}"/>
+                    <!-- Controlled Vocabulary -->
+
                 </f:metadata>
                 <h:form id="datasetForm">
                     <!-- View infoMode -->
@@ -189,7 +196,7 @@
                                                         </h:outputLink>
                                                     </li>
                                                     <li>
-                                                        <p:commandLink id="editMetadata" actionListener="#{DatasetPage.edit('METADATA')}" update="@form,:datasetForm,:messagePanel" oncomplete="javascript:bind_bsui_components();">
+                                                        <p:commandLink id="editMetadata" action="#{KeywordControlledVocabularyModal.loadDatasetOwnerControlledVocabulary(DatasetPage.dataset.owner.id)}" actionListener="#{DatasetPage.edit('METADATA')}" update="@form,:datasetForm,:messagePanel" oncomplete="javascript:bind_bsui_components();">
                                                             <f:setPropertyActionListener target="#{DatasetPage.selectedTabIndex}" value="0" />
                                                             <h:outputText value="#{bundle['dataset.editBtn.itemLabel.metadata']}" />
                                                         </p:commandLink>
@@ -1613,7 +1620,14 @@
                         </div>
                     </p:dialog>
                     <p:remoteCommand name="returnToAuthorCommand" action="#{DatasetPage.sendBackToContributor}"/>                  
+                    <p:remoteCommand name="returnToAuthorCommand" action="#{DatasetPage.sendBackToContributor}"/>
                     <!-- END: Publish/Submit for Review Dialogs -->
+
+                    <!--
+                        <ui:include src="keywordControlledVocabularyModal.xhtml">
+                        </ui:include>
+                     -->
+
                 </h:form>
                 <script>
                     //<![CDATA[

@@ -181,7 +181,7 @@
                                             <span class="glyphicon glyphicon-question-sign tooltip-icon"
                                                   data-toggle="tooltip" data-placement="auto right" data-original-title="#{dsf.datasetFieldType.localeDescription}"></span>
                                         </div>
-                                        <div class="form-group form-col-container col-sm-9 dataset-field-values">
+                                        <div class="form-group form-col-container col-sm-9 dataset-field-values" jsf:rendered = "#{dsf.datasetFieldType.name != 'keyword'}">
                                             <ui:repeat value="#{dsf.datasetFieldCompoundValues}" var="compoundValue" varStatus="valCount">
                                                 <div class="form-group form-col-container col-sm-9 edit-compound-field">
                                                     <!-- Sub Fields -->
@@ -246,6 +246,55 @@
                                                 </div>
                                             </ui:repeat>
                                         </div>
+                                <!--CIMMYT fragment keyword -->
+                                        <div class="form-group form-col-container col-sm-9 dataset-field-values" jsf:rendered = "#{dsf.datasetFieldType.name == 'keyword'}">
+
+                                        <ui:repeat value="#{dsf.datasetFieldCompoundValues}" var="compoundValue" varStatus="valCount">
+                                            <div class="form-group form-col-container col-sm-9 edit-compound-field" id = "#{dsf.datasetFieldType.name}_#{valCount.index}">
+                                                <!-- Sub Fields -->
+                                                <ui:repeat value="#{compoundValue.childDatasetFields}" var="subdsf">
+                                                    <div class="form-col-container #{(subdsf.datasetFieldType.fieldType == 'TEXTBOX') ? 'col-sm-12' : 'col-sm-6'}">
+                                                        <label class="control-label" for="metadata_#{subdsf.datasetFieldType.name}">
+                                                            #{subdsf.datasetFieldType.localeTitle}
+                                                            <h:outputText styleClass="glyphicon glyphicon-asterisk text-danger" value="" rendered="#{subdsf.required}" />
+                                                            <span class="glyphicon glyphicon-question-sign tooltip-icon"
+                                                                  data-toggle="tooltip" data-placement="auto right" data-original-title="#{subdsf.datasetFieldType.localeDescription}"></span>
+                                                        </label>
+                                                        <ui:include src="datasetFieldForEditFragmentKeyword.xhtml">
+                                                            <ui:param name="index" value="#{valCount.index}"/>
+                                                            <ui:param name="dsfv" value="#{subdsf.singleValue}"/>
+                                                            <ui:param name="dsf vIndex" value="0"/>
+                                                            <ui:param name="dsfname" value="#{subdsf.datasetFieldType.name}"/>
+                                                        </ui:include>
+                                                    </div>
+                                                </ui:repeat>
+                                            </div>
+                                            <div class="col-sm-3 field-add-delete" jsf:rendered="#{dsf.datasetFieldType.allowMultiples and !dsf.datasetFieldType.controlledVocabulary}">
+                                                <p:commandLink tabindex="#{block.index+1}" title="#{bundle.add}"
+                                                               styleClass="btn btn-default btn-sm bootstrap-button-tooltip #{dsf.datasetFieldType.compound ? 'compound-field-btn' : ''}"
+                                                               actionListener="#{dsf.addDatasetFieldCompoundValue(valCount.index + 1)}"
+                                                               update=":#{p:resolveClientIds('@id(editCompoundValueFragment)', view)}"
+                                                               oncomplete="javascript:bind_bsui_components();">
+                                                    <span class="glyphicon glyphicon-plus no-text"/>
+                                                </p:commandLink>
+                                                <p:commandLink tabindex="#{block.index+1}" title="#{bundle.delete}"
+                                                               styleClass="btn btn-default btn-sm bootstrap-button-tooltip #{dsf.datasetFieldType.compound ? 'compound-field-btn' : ''}"
+                                                               rendered="#{dsf.datasetFieldCompoundValues.size() > 1}"
+                                                               actionListener="#{dsf.removeDatasetFieldCompoundValue(valCount.index)}"
+                                                               update=":#{p:resolveClientIds('@id(editCompoundValueFragment)', view)}"
+                                                               oncomplete="javascript:bind_bsui_components();">
+                                                    <span class="glyphicon glyphicon-minus no-text"/>
+                                                </p:commandLink>
+                                                <p:commandLink tabindex="#{block.index+1}" title="#{bundle.lookUp}"
+                                                               styleClass="btn btn-default btn-sm bootstr
+                                                                           2button-tooltip #{dsf.datasetFieldType.compound ? 'compound-field-btn' : ''}"
+                                                               onclick="keywordControlledVocabularyOpen(this); return false;">
+                                                    <span class="glyphicon glyphicon-search no-text"/>
+                                                </p:commandLink>
+                                            </div>
+                                        </ui:repeat>
+                            <!-- CIMMYT KEYWORD -->
+                                        </div>
                                     </p:fragment>
                                 </div>
                             </ui:repeat>
@@ -255,5 +304,7 @@
             </ui:repeat>
         </div>
         </p:fragment>
+        <ui:include src="keywordControlledVocabularyModal.xhtml">
+        </ui:include>
     </ui:fragment>
 </ui:composition>
