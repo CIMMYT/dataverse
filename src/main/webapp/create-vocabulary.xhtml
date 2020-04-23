@@ -107,7 +107,12 @@
                                     </p:dataTable>
                                     <div class="button-block" jsf:rendered="#{createVocabularyPage.rowsExists()}">
                                         <p:commandButton class="btn btn-default" update=":vocabulary_form:new_vocabulary_fields" value="#{bundle['dataverse.createVocabulary.saveChangesVocabulary']}"  onclick="PF('cd-create-Vocabulary').show()"/>
-                                        <p:commandButton class="btn btn-default" id="vocabularyCancel" value="#{bundle.cancel}" action="#{createVocabularyPage.cancel()}"/>
+                                    </div>
+                                    <div class="button-block">
+                                        <p:commandLink  type="button" styleClass="btn btn-default " style="color:#000;"
+                                                        action="#{createVocabularyPagey.Cancel()}">
+                                            <span class="glyphicon glyphicon-minus"/> <h:outputText value="#{bundle['dataverse.editVocabulary.button.cancel']}"/>
+                                        </p:commandLink>
                                     </div>
                                 </div>
                             </div>

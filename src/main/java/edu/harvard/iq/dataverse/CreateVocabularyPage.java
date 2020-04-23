@@ -235,7 +235,7 @@ public class CreateVocabularyPage implements java.io.Serializable{
     }
 
 
-    public String cancel() {
+    public String Cancel() {
         return "manage-vocabularies.xhtml?faces-redirect=true&dataverseId="+dataverse.getId(); // go to dataverse page
     }
 

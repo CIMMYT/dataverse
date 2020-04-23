@@ -15,21 +15,13 @@
         <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(manageVocabulariesPage.dataverse, bundle['dataverse.manageVocabularies.pageTittle'])}"/>
     </f:metadata>
     <ui:composition template="/dataverse_template.xhtml">
-        <ui:param name="pageTitle" value="#{bundle['dataset.vocabularyTemplates.pageTitle']} - #{manageVocabulariesPage.dataverse.name}"/>
+        <ui:param name="pageTitle" value="#{bundle['dataverse.manageVocabularies.pageTittle']} - #{manageVocabulariesPage.dataverse.name}"/>
         <ui:param name="dataverse" value="#{manageVocabulariesPage.dataverse}"/>
         <ui:param name="showMessagePanel" value="#{true}"/>
         <ui:define name="body">
             <h:form id="vocabulary-template">
                 <div class="form-group clearfix">
                     <div class="pull-right">
-
-                        <!--
-                        <h:outputLink type="button" styleClass="btn btn-default"
-                                      value="/vocabulary-test.xhtml?dataverseId=#{manageVocabulariesPage.dataverse.id}">
-                            <span class="glyphicon glyphicon-plus"/> <h:outputText value="Vocabulary test for autocomplete"/>
-                        </h:outputLink>
-                         -->
-
                         <h:outputLink type="button" styleClass="btn btn-default"
                                       value="/create-vocabulary.xhtml?dataverseId=#{manageVocabulariesPage.dataverse.id}">
                             <span class="glyphicon glyphicon-plus"/> <h:outputText value="#{bundle['dataverse.manageVocabularies.createBtn']}"/>
@@ -77,6 +69,9 @@
                                 </em>
                             </div>
                         </p:column>
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.controlledVocabulary.vocabularyLanguage}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.language']}">
+                            <h:outputText value="#{vocabulary.controlledVocabulary.vocabularyLanguage}" />
+                        </p:column>
                         <p:column width="15%" class="text-center" sortBy="#{vocabulary.controlledVocabulary.createDate}" headerText="#{bundle['dataset.manageTemplates.tab.header.date']}">
                             <h:outputText value="#{vocabulary.controlledVocabulary.createDate}" />
                         </p:column>
@@ -117,19 +112,22 @@
                 <!-- Import Section -->
 
                 <div class="col-sm-12" jsf:rendered="#{!empty manageVocabulariesPage.cvforimport}" style="margin-top:100px;">
-                    <span class="help-block h4">#{bundle['dataset.manageVocabularies.import']}</span>
+                    <span class="help-block h4">#{bundle['dataverse.manageVocabularies.header.inherit.vocabularies']}</span>
                     <p:dataTable id="vocabularies_for_import"
                                  styleClass="manageTable"
                                  var="vocabulary" value="#{manageVocabulariesPage.cvforimport}" widgetVar="vocabularies_for_import"
                                  paginator="true"
                                  rows="10" rowsPerPageTemplate="5,10,15">
-                        <p:column width="55%" sortBy="#{vocabulary.vocabularyName}" headerText="#{bundle['dataset.manageVocabularies.tab.header.template']}">
+                        <p:column width="55%" sortBy="#{vocabulary.vocabularyName}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.name']}">
                             <h:outputText value="#{vocabulary.vocabularyName}" />
                         </p:column>
-                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.createDate}" headerText="#{bundle['dataset.manageTemplates.tab.header.date']}">
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.vocabularyLanguage}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.language']}">
+                            <h:outputText value="#{vocabulary.vocabularyLanguage}" />
+                        </p:column>
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.createDate}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.date']}">
                             <h:outputText value="#{vocabulary.createDate}" />
                         </p:column>
-                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.owner.name}" headerText="#{bundle['dataset.manageTemplates.tab.header.owner']}">
+                        <p:column width="15%" class="text-center" sortBy="#{vocabulary.owner.name}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.owner']}">
                             <h:outputText value="#{vocabulary.owner.name}" />
                         </p:column>
                         <p:column width="15%" class="col-manage-action text-center" headerText="#{bundle['dataset.manageTemplates.tab.header.action']}">

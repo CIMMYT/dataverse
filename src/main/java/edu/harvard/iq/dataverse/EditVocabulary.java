@@ -198,7 +198,7 @@ public class EditVocabulary implements java.io.Serializable{
     }
 
     public String Cancel(){
-        return "edit-vocabulary.xhtml?faces-redirect=true&vocabularyId="+vocabulary.getId()+"&dataverseId="+dataverse.getId();
+        return "manage-vocabularies.xhtml?dataverseId="+dataverse.getId();
     }
 
     public class NewTerm{
