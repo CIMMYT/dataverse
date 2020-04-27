@@ -105,12 +105,20 @@
                                             <p:rowEditor />
                                         </p:column>
                                     </p:dataTable>
-                                    <div class="button-block" jsf:rendered="#{createVocabularyPage.rowsExists()}">
-                                        <p:commandButton class="btn btn-default" update=":vocabulary_form:new_vocabulary_fields" value="#{bundle['dataverse.createVocabulary.saveChangesVocabulary']}"  onclick="PF('cd-create-Vocabulary').show()"/>
-                                    </div>
+
+                                    <!-- Buttons Cancel/Save -->
                                     <div class="button-block">
+                                        <!-- Save button -->
                                         <p:commandLink  type="button" styleClass="btn btn-default " style="color:#000;"
-                                                        action="#{createVocabularyPagey.Cancel()}">
+                                                        rendered="#{createVocabularyPage.rowsExists()}"
+                                                        class="btn btn-default"
+                                                        update=":vocabulary_form:new_vocabulary_fields"
+                                                        onclick="PF('cd-create-Vocabulary').show()">
+                                            <span class="glyphicon glyphicon-floppy-disk"/> <h:outputText  value="#{bundle['dataverse.createVocabulary.saveChangesVocabulary']}"/>
+                                        </p:commandLink>
+                                        <!-- Cancel button -->
+                                        <p:commandLink  type="button" styleClass="btn btn-default " style="color:#000;"
+                                                        action="#{createVocabularyPage.cancel}" update="@form" async="true" process="@this">
                                             <span class="glyphicon glyphicon-minus"/> <h:outputText value="#{bundle['dataverse.editVocabulary.button.cancel']}"/>
                                         </p:commandLink>
                                     </div>

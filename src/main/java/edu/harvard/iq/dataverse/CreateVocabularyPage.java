@@ -189,6 +189,8 @@ public class CreateVocabularyPage implements java.io.Serializable{
         newVocabulary.setOwner(dataverse);
 
         languagesAvailable = vocabularyService.getLanguages();
+        newVocabularyTerms = null;
+        newVocabularyHeaders = null;
 
 
         FileDownloadView();
@@ -234,9 +236,16 @@ public class CreateVocabularyPage implements java.io.Serializable{
         return vocabulariesNames.contains(vocabularyName.toLowerCase());
     }
 
-
+/*
     public String Cancel() {
         return "manage-vocabularies.xhtml?faces-redirect=true&dataverseId="+dataverse.getId(); // go to dataverse page
+    }
+*/
+
+    public String cancel(){
+        newVocabularyTerms = null;
+        newVocabularyHeaders = null;
+        return "manage-vocabularies.xhtml?faces-redirect=true&dataverseId="+dataverse.getId();
     }
 
     public DataverseControlledVocabulary createDataverseControlledVocabulary(){

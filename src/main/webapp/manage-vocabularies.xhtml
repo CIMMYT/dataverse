@@ -61,7 +61,7 @@
                                  rendered="#{!empty manageVocabulariesPage.dataversecontrolledvocabularies}"
                                  paginator="true"
                                  rows="10" rowsPerPageTemplate="5,10,15">
-                        <p:column width="70%" sortBy="#{vocabulary.controlledVocabulary.vocabularyName}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.name']}">
+                        <p:column width="55%" sortBy="#{vocabulary.controlledVocabulary.vocabularyName}" headerText="#{bundle['dataverse.manageVocabularies.tableVocabulary.name']}">
                             <h:outputText value="#{vocabulary.controlledVocabulary.vocabularyName}" />
                             <div jsf:rendered="#{vocabulary.isimport == true}">
                                 <em class="text-muted">
@@ -152,7 +152,7 @@
 
                 <!-- Import Section -->
 
-                <p:dialog header="#{bundle['dataset.manageVocabulary.tab.action.btn.delete.dialog.header']}" widgetVar="deleteConfirmation" modal="true">
+                <p:dialog header="#{bundle['dataverse.manageVocabularies.dialog.deleteVocabular']}" widgetVar="deleteConfirmation" modal="true">
                     <p class="help-block">
                         <span class="text-danger"><span class="glyphicon glyphicon-warning-sign"/> &#160;<h:outputText value="#{bundle['dataverse.manageVocabularies.dialog.deleteVocabulary.body']}" /></span>
                     </p>

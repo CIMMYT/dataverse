@@ -9,7 +9,6 @@
     <!-- input text start -->
     <span id="pre-input-#{dsf.datasetFieldType.name}" class="pre-input-tag"/>
 
-
     <p:inputText value="#{dsfv.valueForEdit}" id="inputText" tabindex="#{block.index+1}"
                  styleClass="form-control #{dsfname} #{dsfv.datasetField.datasetFieldType.name == 'title' and DatasetPage.editMode == 'CREATE'  ? 'datasetfield-title' : ''}"
                  rendered="#{!dsfv.datasetField.datasetFieldType.controlledVocabulary
@@ -25,7 +24,7 @@
 
     <p:inputTextarea value="#{dsfv.valueForEdit}" id="description" tabindex="#{block.index+1}"
                      rows="5" cols="60" styleClass="form-control"
-                     rendered="#{dsfv.datasetField.datasetFieldType.fieldType == 'TEXTBOX'}" prependId="false"/>
+                     rendered="#{dsfv.datasetField.datasetFieldType.fieldType == 'TEXTBOX'}"/>
 
     <p:watermark for="description" value="#{dsfv.datasetField.datasetFieldType.localeWatermark}"></p:watermark>
 

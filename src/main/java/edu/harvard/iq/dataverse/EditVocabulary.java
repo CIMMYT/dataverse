@@ -60,7 +60,7 @@ public class EditVocabulary implements java.io.Serializable{
     private List<ControlledVocabularyTerms> cvTermsForDelete;
 
 
-    private List<NewTerm> newTerms = new ArrayList<>();
+    private List<NewTerm> newTerms;
     private NewTerm newTerm;
 
 
@@ -86,8 +86,8 @@ public class EditVocabulary implements java.io.Serializable{
             cvTerms.add(term);
         }
 
+        newTerms = new ArrayList<>();
         cvTermsForDelete = new ArrayList<>();
-
         newTerm = new NewTerm();
 
         return null;
@@ -198,7 +198,9 @@ public class EditVocabulary implements java.io.Serializable{
     }
 
     public String Cancel(){
-        return "manage-vocabularies.xhtml?dataverseId="+dataverse.getId();
+        newTerm = null;
+        newTerms = null;
+        return "manage-vocabularies.xhtml?faces-redirect=true&dataverseId="+dataverse.getId();
     }
 
     public class NewTerm{

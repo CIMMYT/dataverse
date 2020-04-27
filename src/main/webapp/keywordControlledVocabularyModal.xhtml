@@ -105,10 +105,14 @@
                 return;
             }
 
+            console.log(keywordContainerId);
             var keywordContainer = $("div#"+keywordContainerId);
             keywordContainer.find("input.keywordValue").val(term);
+            keywordContainer.find("input.keywordValue").submit();
             keywordContainer.find("input.keywordVocabulary").val(vocabulary);
+            keywordContainer.find("input.keywordVocabulary").submit();
             keywordContainer.find("input.keywordVocabularyURI").val(url);
+            keywordContainer.find("input.keywordVocabularyURI").submit();
 
             keywordControlledVocabularyClear();
 
