@@ -69,7 +69,6 @@ public class CreateVocabularyPage implements java.io.Serializable{
 
     private File tempDir;
     private File uploadedFile;
-    private StreamedContent csvFile;
 
     private List<ControlledVocabularyValue> languagesAvailable;
 
@@ -193,7 +192,7 @@ public class CreateVocabularyPage implements java.io.Serializable{
         newVocabularyHeaders = null;
 
 
-        FileDownloadView();
+        //FileDownloadView();
         return null;
     }
 
@@ -388,20 +387,6 @@ public class CreateVocabularyPage implements java.io.Serializable{
 
     public boolean rowsExists() {
         return newVocabularyTerms!=null;
-    }
-
-
-    public void  FileDownloadView(){
-        PrimeFaces.current().executeScript("console.log(' A ver que sale file download');");
-        InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/files/example_csv.csv");
-        if (stream == null) {
-            PrimeFaces.current().executeScript("console.log(' A ver que sale file download 2 -2 ');");
-        }
-        csvFile = new DefaultStreamedContent(stream, "text/csv", "csv_example.csv");
-    }
-
-    public StreamedContent getCsvFile() {
-        return this.csvFile;
     }
 
 

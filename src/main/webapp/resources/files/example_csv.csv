@@ -1,11 +1,4 @@
-ontology_name,trait,url,term,term_es,term_tr
-This field is used for set the ontology name (Mandatory),"If the term is part of a subontology, you can set the subontology name here (optional)",If the term has a URL for reference you can set here (Optional),The term (Mandatory),"If the term has translates, the user can add extra columns in this CSV file for each one. The column name must be the reserved word ""term_"" and the language code in ISO 639-1. Example: if the user add column for spanish language the column name is ""term_es""",
-,,,,,
-,,,,,
-,,,,,
-,,,,,
-,,,,,
-,,,,,
-,,,,,
-,,,,,
-,,,,,
+term,url
+Term (Mandatory) Ontology term for upload to Dataverse, Term's URL (Optional) Ontology term URL
+,
+,

@@ -17,20 +17,17 @@
             <f:viewAction action="#{dataverseSession.updateLocaleInViewRoot}"/>
             <f:viewAction action="#{createVocabularyPage.init}"/>
             <f:viewAction action="#{dataverseHeaderFragment.initBreadcrumbs(createVocabularyPage.dataverse, bundle['dataverse.createVocabulary.AddVocabulary.pageTittle'])}"/>
+
         </f:metadata>
         <ui:define name="body">
             <h:form id="vocabulary_form" enctype="multipart/form-data;charset=UTF-8">
                 <ui:fragment>
                     <p class="help-block">
                         <h:outputFormat value="#{bundle['dataverse.createVocabulary.tip']}" escape="false">
-                            <f:param value="#{systemConfig.guidesBaseUrl}"/>
-                            <f:param value="#{systemConfig.guidesVersion}"/>
+                            <f:param value="/resources/files/example_csv.csv"/>
                         </h:outputFormat>
                     </p>
                     <p class="help-block">
-                        <p:commandButton value="Download" icon="pi pi-download" process="@none">
-                            <p:fileDownload value="#{createVocabularyPage.csvFile}"  />
-                        </p:commandButton>
                     </p>
                 </ui:fragment>
                 <ui:fragment id="new_vocabulary_form" >
@@ -134,6 +131,22 @@
 
                 </ui:fragment>
             </h:form>
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                <p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
+            </p:dialog>
+
+            <script type="text/javascript">
+                //<![CDATA[
+                    function start() {
+                        PF('statusDialog').show();
+                    }
+
+                    function stop() {
+                        PF('statusDialog').hide();
+                    }
+                        //]]>
+            </script>
         </ui:define>
     </ui:composition>
 </h:body>
