@@ -181,6 +181,7 @@
                                             <span class="glyphicon glyphicon-question-sign tooltip-icon"
                                                   data-toggle="tooltip" data-placement="auto right" data-original-title="#{dsf.datasetFieldType.localeDescription}"></span>
                                         </div>
+                                        <!-- <div class="form-group form-col-container col-sm-9 dataset-field-values" > -->
                                         <div class="form-group form-col-container col-sm-9 dataset-field-values" jsf:rendered = "#{dsf.datasetFieldType.name != 'keyword'}">
                                             <ui:repeat value="#{dsf.datasetFieldCompoundValues}" var="compoundValue" varStatus="valCount">
                                                 <div class="form-group form-col-container col-sm-9 edit-compound-field">
@@ -304,7 +305,9 @@
             </ui:repeat>
         </div>
         </p:fragment>
+        <!--
         <ui:include src="keywordControlledVocabularyModal.xhtml">
         </ui:include>
+        -->
     </ui:fragment>
 </ui:composition>
