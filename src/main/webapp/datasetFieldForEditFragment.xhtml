@@ -12,7 +12,7 @@
     <span id="pre-input-#{dsf.datasetFieldType.name}" class="pre-input-tag"/></ui:remove>
     
     <p:inputText value="#{dsfv.valueForEdit}" id="inputText" required="#{required}"
-                 styleClass="form-control #{dsfv.datasetField.datasetFieldType.name == 'title' and DatasetPage.editMode == 'CREATE'  ? 'datasetfield-title' : ''}"
+                 styleClass="form-control #{dsfname} #{dsfv.datasetField.datasetFieldType.name == 'title' and DatasetPage.editMode == 'CREATE'  ? 'datasetfield-title' : ''}"
                  rendered="#{!dsfv.datasetField.datasetFieldType.controlledVocabulary
                              and (dsfv.datasetField.datasetFieldType.fieldType == 'TEXT'
                              or dsfv.datasetField.datasetFieldType.fieldType == 'INT'
