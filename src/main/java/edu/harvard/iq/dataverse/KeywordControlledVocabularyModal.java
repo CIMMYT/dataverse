@@ -1,6 +1,8 @@
 package edu.harvard.iq.dataverse;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -218,6 +220,11 @@ public class KeywordControlledVocabularyModal implements java.io.Serializable {
         term = null;
         url = null;
         controlledVocabularyTerms = new TreeSet<>();
+    }
+
+
+    public void error() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Contact admin."));
     }
 
 }

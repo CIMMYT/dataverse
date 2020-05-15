@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <p:dialog id="keywordControlledVocabularyModal" header="#{bundle['dataset.controlled.modal.keywordControlledVocaulary.modal.header']}"
+              widgetVar="keywordControlledVocabularyModal" modal="true">
+        <p:fragment id="metadataTermModal">
+            <p:inputText id="keywordControlledVocabulary_container"
+                         type="hidden"/>
+
+            <p:inputText id="keywordControlledVocabulary_name"
+                         type="hidden"
+                         value="#{KeywordControlledVocabularyModal.vocabulary}"/>
+
+            <p:inputText id="keywordControlledVocabulary_term"
+                         type="hidden"
+                         value="#{KeywordControlledVocabularyModal.term}"/>
+
+            <p:inputText id="keywordControlledVocabulary_url"
+                         type="hidden"
+                         value="#{KeywordControlledVocabularyModal.url}"/>
+
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>#{bundle['dataset.controlled.modal.keywordControlledVocaulary.modal.controlledVocabulary.label']}</label>
+                    <p:selectOneMenu id="keywordControlledVocabulary_cv_list"
+                                     style="width:100%; min-height:250px; max-height:250px;"
+                                     value="#{KeywordControlledVocabularyModal.selectedControlledVocabularyId}"
+                                     effect="fold" editable="true">
+                        <f:selectItems
+                                value="#{KeywordControlledVocabularyModal.controlledVocabularies}"
+                                var="cv"
+                                itemLabel="#{cv.vocabularyName}"
+                                itemValue="#{cv.id}"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+
+            <p:commandButton value="Error" action="#{KeywordControlledVocabularyModal.error}" />
+        </p:fragment>
+
+
+    </p:dialog>
+
+    <script type="text/javascript">
+
+        function keywordControlledVocabularyOpen(element){
+            PF('keywordControlledVocabularyModal').show();
+
+            var container = $(element).parent().prev();
+            var keywordContainerId = container.attr("id");
+            console.log(keywordContainerId);
+
+            $("[id$=keywordControlledVocabulary_container]").val(keywordContainerId);
+        }
+        function keywordControlledVocabularyOk(){
+            var term = $("[id$=keywordControlledVocabulary_term]").val();
+            var url = $("[id$=keywordControlledVocabulary_url]").val();
+            var vocabulary = $("[id$=keywordControlledVocabulary_name]").val();
+            var keywordContainerId = $("[id$=keywordControlledVocabulary_container]").val();
+
+            console.log(keywordContainerId, term, url, vocabulary);
+
+            if(!keywordContainerId || !term || !vocabulary || !url){
+                return;
+            }
+
+            console.log(keywordContainerId);
+            var keywordContainer = $("div#"+keywordContainerId);
+            keywordContainer.find("input.keywordValue").val(term);
+            keywordContainer.find("input.keywordValue").submit();
+            keywordContainer.find("input.keywordVocabulary").val(vocabulary);
+            keywordContainer.find("input.keywordVocabulary").submit();
+            keywordContainer.find("input.keywordVocabularyURI").val(url);
+            keywordContainer.find("input.keywordVocabularyURI").submit();
+
+            keywordControlledVocabularyClear();
+
+            PF('keywordControlledVocabularyModal').hide();
+        }
+
+        function keywordControlledVocabularyCancel(){
+            PF('keywordControlledVocabularyModal').hide();
+            keywordControlledVocabularyClear();
+        }
+
+        function keywordControlledVocabularyClear(){
+            $("[id$=keywordControlledVocabulary_container]").val('');
+            keywordControlledVocabularyReset();
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+        function keywordControlledVocabularyOpen(element){
+            PF('keywordControlledVocabularyModal').show();
+
+            var container = $(element).parent().prev();
+            var keywordContainerId = container.attr("id");
+            console.log(keywordContainerId);
+
+            $("[id$=keywordControlledVocabulary_container]").val(keywordContainerId);
+        }
+        function keywordControlledVocabularyOk(){
+            var term = $("[id$=keywordControlledVocabulary_term]").val();
+            var url = $("[id$=keywordControlledVocabulary_url]").val();
+            var vocabulary = $("[id$=keywordControlledVocabulary_name]").val();
+            var keywordContainerId = $("[id$=keywordControlledVocabulary_container]").val();
+
+            console.log(keywordContainerId, term, url, vocabulary);
+
+            if(!keywordContainerId || !term || !vocabulary || !url){
+                return;
+            }
+
+            console.log(keywordContainerId);
+            var keywordContainer = $("div#"+keywordContainerId);
+            keywordContainer.find("input.keywordValue").val(term);
+            keywordContainer.find("input.keywordValue").submit();
+            keywordContainer.find("input.keywordVocabulary").val(vocabulary);
+            keywordContainer.find("input.keywordVocabulary").submit();
+            keywordContainer.find("input.keywordVocabularyURI").val(url);
+            keywordContainer.find("input.keywordVocabularyURI").submit();
+
+            keywordControlledVocabularyClear();
+
+            PF('keywordControlledVocabularyModal').hide();
+        }
+
+        function keywordControlledVocabularyCancel(){
+            PF('keywordControlledVocabularyModal').hide();
+            keywordControlledVocabularyClear();
+        }
+
+        function keywordControlledVocabularyClear(){
+            $("[id$=keywordControlledVocabulary_container]").val('');
+            keywordControlledVocabularyReset();
+        }
+
+    </script>
+
+</ui:composition>
